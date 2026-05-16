@@ -1,6 +1,7 @@
 import numpy as np
 import random
 from skimage.transform import rotate, warp, ProjectiveTransform
+from config import NUM_CLASSES, MULTIPLIER, PER_CLASS
 
 
 # =========================================================
@@ -37,7 +38,7 @@ def flip_extend(X, y):
     X_out = []
     y_out = []
 
-    for c in range(43):
+    for c in range(NUM_CLASSES):
 
         mask = (y == c)
 
@@ -212,7 +213,7 @@ def make_extended(X, y, multiplier=20, intensity=0.75):
 # Balanced dataset generation
 # =========================================================
 
-def make_balanced(X, y, per_class=20000, intensity=0.75):
+def make_balanced(X, y, per_class=PER_CLASS, intensity=0.75):
     """
     Creates balanced dataset with equal samples per class.
     """
@@ -221,7 +222,7 @@ def make_balanced(X, y, per_class=20000, intensity=0.75):
 
     y_out = []
 
-    for c in range(43):
+    for c in range(NUM_CLASSES):
 
         imgs = X[y == c]
 
