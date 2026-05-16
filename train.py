@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-
+from config import BATCH_SIZE, LR_STAGE1, LR_STAGE2, MULTIPLIER, PER_CLASS
 from data_loader import load_data
 from preprocess import preprocess, one_hot
 from augment import flip_extend, make_extended, make_balanced
@@ -60,7 +60,7 @@ print("\nGenerating extended dataset...")
 X_ext, y_ext = make_extended(
     X_flipped,
     y_flipped,
-    multiplier=5
+    multiplier=MULTIPLIER
 )
 
 print(f"Extended dataset: {X_ext.shape}")
@@ -73,7 +73,7 @@ print("\nGenerating balanced dataset...")
 X_bal, y_bal = make_balanced(
     X_flipped,
     y_flipped,
-    per_class=5000
+    per_class=PER_CLASS
 )
 
 print(f"Balanced dataset: {X_bal.shape}")
@@ -116,7 +116,7 @@ print("\n=== Stage 1: Pre-training ===")
 model = build_model()
 
 model.compile(
-    optimizer=tf.keras.optimizers.Adam(1e-3),
+    optimizer=tf.keras.optimizers.Adam(LR_STAGE1),
     loss='categorical_crossentropy',
     metrics=['accuracy']
 )
@@ -125,9 +125,9 @@ model.fit(
     X_ext,
     y_ext_oh,
     validation_data=(X_valid, y_valid_oh),
-    batch_size=128,
-    epochs=50,
-    callbacks=[early_stop, checkpoint],
+    batch_size=BATCH_SIZE,
+    epochs=500,
+    callbacks=[early_stop, checkpoint, lr_scheduler],
     shuffle=True
 )
 
@@ -141,7 +141,7 @@ print("\nStage 1 complete.")
 print("\n=== Stage 2: Fine-tuning ===")
 
 model.compile(
-    optimizer=tf.keras.optimizers.Adam(1e-4),
+    optimizer=tf.keras.optimizers.Adam(LR_STAGE2),
     loss='categorical_crossentropy',
     metrics=['accuracy']
 )
@@ -151,8 +151,8 @@ model.fit(
     y_bal_oh,
     validation_data=(X_valid, y_valid_oh),
     batch_size=128,
-    epochs=50,
-    callbacks=[early_stop, checkpoint],
+    epochs=500,
+    callbacks=[early_stop, checkpoint, lr_scheduler],
     shuffle=True
 )
 
