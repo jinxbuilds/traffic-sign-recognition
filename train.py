@@ -5,11 +5,17 @@ from data_loader import load_data
 from preprocess import preprocess, one_hot
 from augment import flip_extend, make_extended, make_balanced
 from model import build_model
+from config import DATASET_DIR
+
 
 
 # --- Load dataset ---
 
-(X_train, y_train), (X_valid, y_valid), (X_test, y_test) = load_data()
+(X_train, y_train), (X_valid, y_valid), (X_test, y_test) = load_data(
+    f'{DATASET_DIR}/train.p',
+    f'{DATASET_DIR}/valid.p',
+    f'{DATASET_DIR}/test.p'
+)
 
 print(f"Train: {X_train.shape}")
 print(f"Valid: {X_valid.shape}")
