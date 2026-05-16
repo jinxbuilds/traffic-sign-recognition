@@ -1,9 +1,10 @@
 import cv2
+import os
 import numpy as np
 import tensorflow as tf
-
+from config import DATASET_DIR
 from preprocess import preprocess
-from config import SAMPLE_IMAGE
+
 
 # =========================================================
 # Load trained model
@@ -67,7 +68,7 @@ sign_names = {
 # Load image
 # =========================================================
 
-IMAGE_PATH = SAMPLE_IMAGE
+SAMPLE_IMAGE = os.path.join(DATASET_DIR, 'GTSRB_Final_Test_Images', 'GTSRB', 'Final_Test', 'Images', '00016.ppm')
 
 img = cv2.imread(IMAGE_PATH)
 
