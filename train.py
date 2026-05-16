@@ -101,6 +101,13 @@ checkpoint = tf.keras.callbacks.ModelCheckpoint(
     verbose=1
 )
 
+lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(
+    monitor='val_loss',
+    factor=0.5,
+    patience=20,
+    min_lr=1e-6,
+    verbose=1
+)
 
 # --- Stage 1: Pre-training ---
 
