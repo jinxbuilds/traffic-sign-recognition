@@ -3,13 +3,13 @@ import numpy as np
 import tensorflow as tf
 
 from preprocess import preprocess
-
+from config import SAMPLE_IMAGE
 
 # =========================================================
 # Load trained model
 # =========================================================
 
-model = tf.keras.models.load_model('best_model.keras')
+model = tf.keras.models.load_model('stage2.keras')
 
 
 # =========================================================
@@ -67,7 +67,7 @@ sign_names = {
 # Load image
 # =========================================================
 
-IMAGE_PATH = r'dataset/GTSRB_Final_Test_Images/GTSRB/Final_Test/Images/00016.ppm'
+IMAGE_PATH = SAMPLE_IMAGE
 
 img = cv2.imread(IMAGE_PATH)
 
