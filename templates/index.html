@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Traffic Sign Recognition</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Traffic Sign Recognition</h1>
+
+        <p>Upload a traffic sign image for prediction</p>
+
+        <form id="upload-form">
+
+            <div class="upload-box">
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/*"
+                    required
+                >
+
+            </div>
+
+            <button type="submit">
+                Predict Sign
+            </button>
+
+        </form>
+
+        <img id="preview">
+
+        <div class="result-box" id="resultBox">
+
+            <div class="prediction" id="predictionText"></div>
+
+            <div class="confidence" id="confidenceText"></div>
+
+        </div>
+
+    </div>
+
+<script>
+
+document.getElementById("imageInput").addEventListener("change", function(event){
+
+    const file = event.target.files[0];
+
+    if(file){
+
+        const preview = document.getElementById("preview");
+
+        preview.src = URL.createObjectURL(file);
+
+        preview.style.display = "block";
+    }
+});
+
+document.getElementById("upload-form").addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const fileInput = document.getElementById("imageInput");
+
+    if(!fileInput.files.length){
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("file", fileInput.files[0]);
+
+    try{
+
+        const response = await fetch("/predict", {
+            method:"POST",
+            body:formData
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+
+        const resultBox = document.getElementById("resultBox");
+
+        resultBox.style.display = "block";
+
+        if(data.error){
+
+            document.getElementById("predictionText").innerText =
+                "Prediction Failed";
+
+            document.getElementById("confidenceText").innerText =
+                data.error;
+
+        }else{
+
+            document.getElementById("predictionText").innerText =
+                data.prediction;
+
+            document.getElementById("confidenceText").innerText =
+                "Confidence: " + data.confidence + "%";
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById("resultBox").style.display = "block";
+
+        document.getElementById("predictionText").innerText =
+            "Server Error";
+
+        document.getElementById("confidenceText").innerText =
+            "Could not connect to Flask backend";
+    }
+
+});
+
+</script>
+
+</body>
+</html>
