@@ -2,7 +2,7 @@
 dataset/
 
 # Models
-*.h5
+*.keras
 *.p
 
 # Python cache
