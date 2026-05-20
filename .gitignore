@@ -2,7 +2,6 @@
 dataset/
 
 # Models
-*.keras
 *.h5
 *.p
 
