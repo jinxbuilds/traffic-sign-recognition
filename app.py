@@ -22,19 +22,20 @@ app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 
 # Load model
-try:
+model = None
 
-    model = build_model()
+def load_model():
+    global model
 
-    model.load_weights("model/model.weights.h5")
+    if model is None:
+        try:
+            model = build_model()
+            model.load_weights("model/model.weights.h5")
+            print("MODEL LOADED SUCCESSFULLY")
 
-    print("MODEL LOADED SUCCESSFULLY")
-
-except Exception as e:
-
-    print(f"Error loading model: {e}")
-
-    model = None
+        except Exception as e:
+            print(f"Error loading model: {e}")
+            model = None
 
 # Traffic sign classes (GTSRB dataset - 43 classes)
 classes = {
@@ -102,38 +103,49 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
+
+    load_model()
+
     try:
         if model is None:
             return jsonify({"error": "Model not loaded"}), 500
-        
+
         # Check if image is provided
         if "file" not in request.files:
             return jsonify({"error": "No image file provided"}), 400
-        
+
         file = request.files["file"]
-        
+
         if file.filename == "":
             return jsonify({"error": "No file selected"}), 400
-        
+
         # Open and preprocess image
         image = Image.open(file)
+
         processed = preprocess_image(image)
-        
+
         # Make prediction
         prediction = model.predict(processed, verbose=0)
+
         predicted_class = np.argmax(prediction)
+
         confidence = float(np.max(prediction))
-        
+
         result = classes.get(predicted_class, "Unknown class")
-        
+
         return jsonify({
             "prediction": result,
             "class_id": int(predicted_class),
             "confidence": round(confidence * 100, 2)
         })
-    
+
     except Exception as e:
-        return jsonify({"error": f"Prediction failed: {str(e)}"}), 500
+
+        print("PREDICTION ERROR:", str(e))
+
+        return jsonify({
+            "error": f"Prediction failed: {str(e)}"
+        }), 500
 
 if __name__ == "__main__":
 
