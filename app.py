@@ -1,9 +1,10 @@
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 from flask import Flask, request, jsonify, render_template
 from PIL import Image
 from preprocess import preprocess
 from model_architecture import build_model
 import numpy as np
-import os
 import cv2
 import tensorflow as tf
 
