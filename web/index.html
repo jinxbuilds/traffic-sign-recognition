@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Traffic Sign Recognition · in your browser</title>
+  <meta name="description" content="A CNN trained on GTSRB that classifies 43 traffic signs, running entirely in your browser with TensorFlow.js." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='30,5 70,5 95,30 95,70 70,95 30,95 5,70 5,30' fill='%23facc15'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow"><span class="dot" id="statusDot"></span><span id="status">Loading model…</span></p>
+      <h1>Traffic Sign <em>Recognition</em></h1>
+      <p class="lede">A CNN trained on the German Traffic Sign Recognition Benchmark (43 classes, ~99% test accuracy). It runs <strong>entirely in your browser</strong>, so your image never leaves your device.</p>
+    </header>
+
+    <section class="grid">
+      <div class="panel">
+        <label class="drop" id="drop" tabindex="0">
+          <input type="file" id="file" accept="image/*" hidden />
+          <img id="preview" alt="" hidden />
+          <span id="dropText">
+            <strong>Drop a sign photo here</strong><br />or click to choose · paste works too
+          </span>
+        </label>
+        <p class="hint">Works best with a cropped sign that fills most of the frame, like the GTSRB training images.</p>
+      </div>
+
+      <div class="panel">
+        <div id="result" class="result" aria-live="polite">
+          <p class="muted">Your prediction will appear here.</p>
+        </div>
+        <div class="pipeline" id="pipeline" hidden>
+          <h2>What the model sees</h2>
+          <div class="steps">
+            <figure><canvas id="cResized" width="32" height="32"></canvas><figcaption>Resized 32×32</figcaption></figure>
+            <figure><canvas id="cGray" width="32" height="32"></canvas><figcaption>Grayscale</figcaption></figure>
+            <figure><canvas id="cClahe" width="32" height="32"></canvas><figcaption>CLAHE equalised</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>TensorFlow · Keras · OpenCV-exact preprocessing ported to JS · TensorFlow.js</span>
+      <span><a href="https://github.com/jinxbuilds/traffic-sign-recognition" target="_blank" rel="noopener">Source ↗</a> · <a href="https://unsaidspaces.com" target="_blank" rel="noopener">Unsaid Spaces ↗</a></span>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

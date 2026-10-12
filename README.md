@@ -7,6 +7,12 @@ CNN-based traffic sign classifier trained on the German Traffic Sign Recognition
 ![Single Prediction](Image-Predict_result.png)
 ![Batch Prediction](Batch_predict_results.png)
 
+## Run it in your browser
+
+`web/` is a static version that runs the same model client-side with TensorFlow.js: no server, no cold start, and images never leave the device. The preprocessing (OpenCV resize, grayscale, scikit-image CLAHE) is ported to JavaScript and verified bit-exact against the Python pipeline (`web/verify/`).
+
+Preview locally with `cd web && python -m http.server`, or deploy on Vercel with **Root Directory** set to `web` (framework preset "Other", no build command).
+
 ## Tech Stack
 
 - Python 3.10+
